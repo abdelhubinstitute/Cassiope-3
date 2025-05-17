@@ -1,7 +1,6 @@
 from typing import Dict, List
 
 from agents import Runner
-from .config import load_config, save_config
 
 from .agents import (
     generator_titres,
@@ -20,12 +19,6 @@ def refine_title(theme: str) -> List[str]:
     return result.final_output
 
 
-def set_title(title: str) -> None:
-    cfg = load_config()
-    cfg["title"] = title
-    save_config(cfg)
-
-
 def research(title: str) -> str:
     result = Runner.run_sync(agent_recherche, title)
     return result.final_output
@@ -36,13 +29,9 @@ def generate_plans(title: str, research_results: str):
     return result.final_output
 
 
-def draft_article(title: str, research_results: str, plan: str):
-    cfg = load_config()
-    meta = f"Tone: {cfg.get('tone')}\nLongueur: {cfg.get('length')}"
-    result = Runner.run_sync(
-        redacteur_initial,
-        f"{title}\n{plan}\n{research_results}\n{meta}",
-    )
+def draft_article(title: str, research_results: str, plan: str, tone: str, length: str):
+    prompt = f"TON:{tone}\nLONGUEUR:{length}\n{title}\n{plan}\n{research_results}"
+    result = Runner.run_sync(redacteur_initial, prompt)
     return result.final_output
 
 
@@ -51,13 +40,11 @@ def critique_article(article_v1: str, feedback: str):
     return result.final_output
 
 
-def revise_article(title: str, research_results: str, plan: str, article_v1: str, critique: str):
-    cfg = load_config()
-    meta = f"Tone: {cfg.get('tone')}\nLongueur: {cfg.get('length')}"
-    result = Runner.run_sync(
-        redacteur_final,
-        f"{title}\n{plan}\n{research_results}\n{article_v1}\n{critique}\n{meta}",
+def revise_article(title: str, research_results: str, plan: str, article_v1: str, critique: str, tone: str, length: str):
+    prompt = (
+        f"TON:{tone}\nLONGUEUR:{length}\n{title}\n{plan}\n{research_results}\n{article_v1}\n{critique}"
     )
+    result = Runner.run_sync(redacteur_final, prompt)
     return result.final_output
 
 
@@ -67,12 +54,6 @@ def create_visual_prompt(article: str) -> str:
 
 
 def format_html(article: str, image_url: str) -> str:
-    cfg = load_config()
-    styles = (
-        "<style>body{font-family:'Roboto',sans-serif;margin:2rem;}h1{font-weigh"
-        "t:500;}img{max-width:100%;height:auto;}</style>"
-    )
-    meta = f"<p><em>Tone: {cfg.get('tone')} - Longueur: {cfg.get('length')}</em></p>"
-    content = f"{styles}<h1>{cfg.get('title','')}</h1>{meta}{article}<img src='{image_url}'>"
+    content = f"Article:\n{article}\nImage:\n{image_url}"
     result = Runner.run_sync(html_formatter, content)
     return result.final_output

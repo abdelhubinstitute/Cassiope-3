@@ -1,6 +1,6 @@
 # Cassiope
 
-Application de rédaction d'articles multi‑agents en français. Cassiope utilise l'SDK OpenAI Agents et Streamlit pour orchestrer différents agents GPT‑4o.
+Application de rédaction d'articles multi‑agents en français pour le HUB Institute. Cassiope s'appuie sur l'SDK OpenAI Agents et Streamlit pour orchestrer plusieurs agents GPT‑4o.
 
 ## Installation
 
@@ -18,4 +18,4 @@ streamlit run app.py
 
 Ajoutez vos clés API OpenAI et Fal.ai dans le panneau latéral puis suivez les étapes.
 
-Vous pouvez également personnaliser le ton et la longueur des articles ainsi que modifier les instructions de chaque agent via l'éditeur de prompts.
+Le panneau de configuration permet également d'ajuster le ton et la longueur des articles ainsi que de modifier les instructions des agents.

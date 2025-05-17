@@ -7,58 +7,57 @@ from .prompts import load_prompts
 class Plan(BaseModel):
     sections: List[str]
 
+_PROMPTS = load_prompts()
 
-_prompts = load_prompts()
-
-# Define agents following the description
+# Define agents using the loaded prompts
 
 generator_titres = Agent(
     name="GénérateurTitres",
-    instructions=_prompts["generator_titres"],
+    instructions=_PROMPTS["GénérateurTitres"],
     model="gpt-4o",
 )
 
 agent_recherche = Agent(
     name="AgentRecherche",
-    instructions=_prompts["agent_recherche"],
+    instructions=_PROMPTS["AgentRecherche"],
     tools=[WebSearchTool()],
     model="gpt-4o",
 )
 
 plan_agent = Agent(
     name="GénérateurPlan",
-    instructions=_prompts["plan_agent"],
+    instructions=_PROMPTS["GénérateurPlan"],
     model="gpt-4o",
     output_type=List[Plan],
 )
 
 redacteur_initial = Agent(
     name="RédacteurInitial",
-    instructions=_prompts["redacteur_initial"],
+    instructions=_PROMPTS["RédacteurInitial"],
     model="gpt-4o",
 )
 
 agent_critique = Agent(
     name="AgentCritique",
-    instructions=_prompts["agent_critique"],
+    instructions=_PROMPTS["AgentCritique"],
     model="gpt-4o",
 )
 
 redacteur_final = Agent(
     name="RédacteurFinal",
-    instructions=_prompts["redacteur_final"],
+    instructions=_PROMPTS["RédacteurFinal"],
     model="gpt-4o",
 )
 
 prompt_visuel_agent = Agent(
     name="CréateurPromptVisuel",
-    instructions=_prompts["prompt_visuel_agent"],
+    instructions=_PROMPTS["CréateurPromptVisuel"],
     model="gpt-4o",
 )
 
 html_formatter = Agent(
     name="FormateurHTML",
-    instructions=_prompts["html_formatter"],
+    instructions=_PROMPTS["FormateurHTML"],
     model="gpt-4o",
 )
 
